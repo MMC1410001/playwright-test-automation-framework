@@ -1,0 +1,179 @@
+{
+  "calculator": {
+    "scenarios": [
+      {
+        "name": "low-usage",
+        "inputTokens": 1000,
+        "outputTokens": 500,
+        "apiCalls": 100
+      },
+      {
+        "name": "medium-usage",
+        "inputTokens": 10000,
+        "outputTokens": 5000,
+        "apiCalls": 1000
+      },
+      {
+        "name": "high-usage",
+        "inputTokens": 100000,
+        "outputTokens": 50000,
+        "apiCalls": 10000
+      },
+      {
+        "name": "enterprise-usage",
+        "inputTokens": 1000000,
+        "outputTokens": 500000,
+        "apiCalls": 100000
+      }
+    ],
+    "providers": [
+      "OpenAI",
+      "Anthropic",
+      "Google",
+      "Meta",
+      "Cohere",
+      "Mistral",
+      "Amazon"
+    ],
+    "modelPreferences": [
+      "All",
+      "Smartest",
+      "Cheapest",
+      "Fastest"
+    ]
+  },
+  "agentConfig": {
+    "languages": [
+      {
+        "value": "en-US",
+        "label": "English (US)"
+      },
+      {
+        "value": "en-IN",
+        "label": "Hindi (India)"
+      },
+      {
+        "value": "ar-XA",
+        "label": "Arabic (Saudi Arabia)"
+      }
+    ],
+    "voices": [
+      {
+        "value": "en-US-Chirp3-HD-Despina",
+        "label": "English US Female"
+      },
+      {
+        "value": "en-IN-Chirp3-HD-Despina",
+        "label": "English IN Female"
+      }
+    ],
+    "testPrompts": [
+      "You are a helpful AI assistant specializing in customer support.",
+      "You are an expert in healthcare and provide accurate medical information.",
+      "You are a friendly assistant that helps users with their daily tasks."
+    ],
+    "testGreetings": [
+      "Hello! How can I assist you today?",
+      "Welcome! I'm here to help.",
+      "Hi there! What can I do for you?"
+    ]
+  },
+  "contactForm": {
+    "validData": {
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "phone": "1234567890",
+      "company": "Test Company",
+      "message": "This is a test message for contact form validation."
+    },
+    "invalidEmails": [
+      "invalid-email",
+      "invalid@",
+      "@example.com",
+      "invalid.com",
+      "invalid@.com"
+    ],
+    "invalidPhones": [
+      "123",
+      "12345678901234",
+      "abcdefghij",
+      "123-abc-4567"
+    ],
+    "invalidNames": [
+      "John123",
+      "John@Doe",
+      "John#Doe",
+      "123456"
+    ]
+  },
+  "assessment": {
+    "personalDetails": {
+      "fullName": "Jane Smith",
+      "businessEmail": "jane.smith@company.com",
+      "phoneNumber": "9876543210"
+    },
+    "organizationDetails": {
+      "company": "Acme Corporation",
+      "industry": "Healthcare",
+      "teamSize": "50-100",
+      "revenue": "$10M - $50M"
+    }
+  },
+  "blog": {
+    "searchKeywords": [
+      "AI automation",
+      "Machine Learning",
+      "Healthcare",
+      "Pharma",
+      "Technology"
+    ],
+    "categories": [
+      "AI Technology",
+      "Healthcare",
+      "Case Studies",
+      "Product Updates",
+      "Industry Insights"
+    ]
+  },
+  "admin": {
+    "testBlog": {
+      "title": "Test Blog Post for Automation",
+      "slug": "test-blog-post-automation",
+      "metaDescription": "This is a test blog post created by automated tests",
+      "excerpt": "Automated test blog excerpt",
+      "category": "Product Updates",
+      "author": "Test Author",
+      "readTime": "5 min read",
+      "content": "This is the main content of the test blog post. It contains multiple paragraphs and formatting to test the rich text editor functionality.",
+      "publish": false
+    },
+    "testCategory": {
+      "name": "Test Category",
+      "slug": "test-category",
+      "description": "This is a test category created by automated tests"
+    },
+    "testProfile": {
+      "name": "Admin Test User",
+      "email": "admin@https://www.saucedemo.com",
+      "designation": "QA Engineer",
+      "company": "Saas AI",
+      "bio": "QA Engineer responsible for automated testing"
+    }
+  },
+  "newsletter": {
+    "validEmail": "subscriber@example.com",
+    "invalidEmails": [
+      "invalid-email",
+      "test@",
+      "@example.com"
+    ]
+  },
+  "performance": {
+    "thresholds": {
+      "lcp": 2500,
+      "fid": 100,
+      "cls": 0.1,
+      "pageLoadTime": 3000
+    }
+  }
+}

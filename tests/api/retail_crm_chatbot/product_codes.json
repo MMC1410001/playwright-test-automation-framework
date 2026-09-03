@@ -1,0 +1,1813 @@
+{
+  "_source": "product ids and names.xlsx",
+  "_generated": "2026-07-31",
+  "_note": "Regenerate with: see SFA_KnowAboutProduct_README.md > Refreshing master data. Codes are kept verbatim, including the leading spaces in \" PEN\" / \" NOTEPAD\" - those are significant.",
+  "_rowCount": 361,
+  "products": [
+    {
+      "code": "950002",
+      "name": "ITALIAN PU SEALER BASE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950005",
+      "name": "ITALIAN PU MATTE BASE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950008",
+      "name": "ITALIAN PU GLOSS BASE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950003",
+      "name": "ITALIAN PU SEALER & MATTE HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950009",
+      "name": "IT PU GLOSS CLEAR & GLOSS WHITE HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950006",
+      "name": "ITALIAN PU MATTE HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950001",
+      "name": "ITALIAN PU SEALER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950004",
+      "name": "ITALIAN PU MATTE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950007",
+      "name": "ITALIAN PU GLOSS",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953004",
+      "name": "PU THINNER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "51718",
+      "name": "EPOXY ISOLANT BASE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "51719",
+      "name": "EPOXY ISOLANT HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950024",
+      "name": "EPOXY ISOLANT",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953005",
+      "name": "SLOW DRYING PU THINNER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "56X305MM",
+      "name": "FNSHD GOODS",
+      "subBrand": ""
+    },
+    {
+      "code": "FGP",
+      "name": "56X305MM",
+      "subBrand": ""
+    },
+    {
+      "code": " PEN",
+      "name": " NOTEPAD",
+      "subBrand": ""
+    },
+    {
+      "code": "899008",
+      "name": "PAINT CRAFT KIT",
+      "subBrand": ""
+    },
+    {
+      "code": "910001",
+      "name": "RETAIL_CRM WHITE PRECOTE",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "910020",
+      "name": "D20 ACRYCLIC DISTEMPER",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "910030",
+      "name": "I30 EMULSION PAINT",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "910050",
+      "name": "I50 PREMIUM EMULSION",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "910106",
+      "name": "I6",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "910110",
+      "name": "I10 PRIMER",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "910210",
+      "name": "N10 ST PRIMER",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916005",
+      "name": "T15",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916006",
+      "name": "T20",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916007",
+      "name": "TD3",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916008",
+      "name": "TR3",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916009",
+      "name": "T30",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916010",
+      "name": "TS3",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916011",
+      "name": "PRIME T25",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916030",
+      "name": "E30 EMULSION PAINT",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916050",
+      "name": "E50 PREMIUM EMULSION",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916070",
+      "name": "E70 LUXURY EMULSION",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916071",
+      "name": "0N10 PRIMER",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916090",
+      "name": "E90",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916108",
+      "name": "E8",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "916110",
+      "name": "E10 PRIMER",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "917051",
+      "name": "EX50",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "917052",
+      "name": "EV50",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "918130",
+      "name": "B30 WP BASECOAT",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "918170",
+      "name": "B70 WP BASECOAT",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "918175",
+      "name": "PRIME B75",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "918190",
+      "name": "B90 WP BASECOAT",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919001",
+      "name": "MEMBRANE HP12",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919002",
+      "name": "MEMBRANE HS12",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919003",
+      "name": "MEMBRANE HW15",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919004",
+      "name": "MEMBRANE HT30",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919005",
+      "name": "MEMBRANE AP30",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919006",
+      "name": "MEMBRANE SB15",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919007",
+      "name": "MEMBRANE APS1",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919008",
+      "name": "P1K",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919009",
+      "name": "PPS",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919011",
+      "name": "PPS PART A",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919012",
+      "name": "PPS PART B",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919013",
+      "name": "EFG 2K",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919014",
+      "name": "EFG 2K PART A",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919015",
+      "name": "EFG 2K PART B",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919016",
+      "name": "PPW",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919017",
+      "name": "PPW PART A",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "919018",
+      "name": "PPW PART B",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "920001",
+      "name": "C2K",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "920002",
+      "name": "C2K+",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "920003",
+      "name": "RLP",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "920004",
+      "name": "GLC",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "920005",
+      "name": "RCG",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "920006",
+      "name": "RCP",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "920007",
+      "name": "PRIME C2K+ POWDER",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "920008",
+      "name": "PRIME C2K+ LIQUID",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "920009",
+      "name": "PRIME C2K POWDER",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "920010",
+      "name": "PRIME C2K LIQUID",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "921108",
+      "name": "NR 8 RO PRIMER",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "921932",
+      "name": "N52 SOLVENT ENAMEL",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "921933",
+      "name": "N53 SOLVENT ENAMEL",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "922170",
+      "name": "BV70",
+      "subBrand": "Prime"
+    },
+    {
+      "code": "924001",
+      "name": "PRO MELAMINE SEALER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "924002",
+      "name": "PRO MELAMINE MATTE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "924003",
+      "name": "PRO MELAMINE GLOSS",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "924004",
+      "name": "PRO PU SEALER BASE",
+      "subBrand": "Allwood Pro"
+    },
+    {
+      "code": "924004",
+      "name": "PRO PU SEALER BASE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "924005",
+      "name": "PRO PU MATT BASE",
+      "subBrand": "Allwood Pro"
+    },
+    {
+      "code": "924006",
+      "name": "PRO PU GLOSS BASE",
+      "subBrand": "Allwood Pro"
+    },
+    {
+      "code": "924007",
+      "name": "PRO PU SEAL/MATT HARD",
+      "subBrand": "Allwood Pro"
+    },
+    {
+      "code": "924009",
+      "name": "PRO PU SEALER HARD",
+      "subBrand": "Allwood Pro"
+    },
+    {
+      "code": "924010",
+      "name": "PRO PU MATT HARD",
+      "subBrand": "Allwood Pro"
+    },
+    {
+      "code": "924011",
+      "name": "PRO PU SEALER BASE",
+      "subBrand": "Allwood Pro"
+    },
+    {
+      "code": "924012",
+      "name": "PRO PU GLOSS HARDENER",
+      "subBrand": "Allwood Pro"
+    },
+    {
+      "code": "924013",
+      "name": "VFM PU SEALER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "924014",
+      "name": "VFM PU SEALER HARDNER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "924015",
+      "name": "VFM PU MATT",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "924016",
+      "name": "VFM PU MATT HARDNER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "924017",
+      "name": "VFM PU GLOSS",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "924018",
+      "name": "VFM PU GLOSS HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "930001",
+      "name": "EXPLORE 15",
+      "subBrand": "One"
+    },
+    {
+      "code": "930002",
+      "name": "EXPLORE ROLLER",
+      "subBrand": "One"
+    },
+    {
+      "code": "930003",
+      "name": "INSPIRE CONCRETE",
+      "subBrand": "One"
+    },
+    {
+      "code": "931001",
+      "name": "TRUE LOOK",
+      "subBrand": "One"
+    },
+    {
+      "code": "931002",
+      "name": "TRUE FLEX",
+      "subBrand": "One"
+    },
+    {
+      "code": "931003",
+      "name": "TRUE LIFE",
+      "subBrand": "One"
+    },
+    {
+      "code": "931004",
+      "name": "TRUE VISION",
+      "subBrand": "One"
+    },
+    {
+      "code": "931005",
+      "name": "INSPIRE CLEAR COAT",
+      "subBrand": "One"
+    },
+    {
+      "code": "931006",
+      "name": "TRUE FLEX",
+      "subBrand": "One"
+    },
+    {
+      "code": "931007",
+      "name": "TRUE LIFE",
+      "subBrand": "One"
+    },
+    {
+      "code": "931008",
+      "name": "TRUE VISION",
+      "subBrand": "One"
+    },
+    {
+      "code": "932001",
+      "name": "PERFECT CHOICE PRIMER",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "932002",
+      "name": "NEO STAR",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "932003",
+      "name": "NEO STAR SHINE",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "932004",
+      "name": "NEO FLOOR SHADE",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "932005",
+      "name": "NEO TILE SHADE",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "932006",
+      "name": "NEO STAR SHINE",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "932007",
+      "name": "NEO KING",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "932008",
+      "name": "ALPHA NEO STAR",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "932009",
+      "name": "ALPHA NEO STAR SHINE",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "933001",
+      "name": "PERFECT START PRIMER",
+      "subBrand": "Style"
+    },
+    {
+      "code": "933002",
+      "name": "PERFECT START PRIMER",
+      "subBrand": "Style"
+    },
+    {
+      "code": "933003",
+      "name": "POWER BRIGHT",
+      "subBrand": "Style"
+    },
+    {
+      "code": "933004",
+      "name": "POWER FIT",
+      "subBrand": "Style"
+    },
+    {
+      "code": "933005",
+      "name": "POWER BRIGHT SHINE",
+      "subBrand": "Style"
+    },
+    {
+      "code": "933020",
+      "name": "POWER BRIGHT",
+      "subBrand": "Style"
+    },
+    {
+      "code": "933021",
+      "name": "POWER FIT",
+      "subBrand": "Style"
+    },
+    {
+      "code": "933022",
+      "name": "POWER BRIGHT SHINE",
+      "subBrand": "Style"
+    },
+    {
+      "code": "933023",
+      "name": "ALPHA POWER BRIGHT",
+      "subBrand": "Style"
+    },
+    {
+      "code": "936001",
+      "name": "SALT SEAL",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "936002",
+      "name": "WALLFIX 4",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "936003",
+      "name": "WALLNROOF 10",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "936004",
+      "name": "WALLNROOF 12",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "936005",
+      "name": "SALT SEAL",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "936006",
+      "name": "WALLFIX 4",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "936007",
+      "name": "WALLNROOF 10",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "936008",
+      "name": "WALLNROOF 12",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "936009",
+      "name": "WALLNROOF 7",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "936010",
+      "name": "TOTAL STOP",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "936011",
+      "name": "TOTAL WIN",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "936012",
+      "name": "WALLNROOF 14",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "940001",
+      "name": "DREAM EFFECTS",
+      "subBrand": "One"
+    },
+    {
+      "code": "940002",
+      "name": "DREAM EFFECTS METALLIC",
+      "subBrand": "One"
+    },
+    {
+      "code": "940003",
+      "name": "DREAM MARBLE",
+      "subBrand": "One"
+    },
+    {
+      "code": "940004",
+      "name": "DREAM TEXTURE",
+      "subBrand": "One"
+    },
+    {
+      "code": "940005",
+      "name": "DREAM DURACOAT",
+      "subBrand": "One"
+    },
+    {
+      "code": "940101",
+      "name": "TIMELESS STONE",
+      "subBrand": "One"
+    },
+    {
+      "code": "940102",
+      "name": "TIMELESS NATURA",
+      "subBrand": "One"
+    },
+    {
+      "code": "940103",
+      "name": "TIMELESS CLAY",
+      "subBrand": "One"
+    },
+    {
+      "code": "940104",
+      "name": "TIMELESS MARMORINO",
+      "subBrand": "One"
+    },
+    {
+      "code": "940105",
+      "name": "TIMELESS MARMORINO METALLIC",
+      "subBrand": "One"
+    },
+    {
+      "code": "941001",
+      "name": "PURE ELEGANCE",
+      "subBrand": "One"
+    },
+    {
+      "code": "941002",
+      "name": "PURE ELEGANCE SHINE",
+      "subBrand": "One"
+    },
+    {
+      "code": "941003",
+      "name": "PURE ELEGANCE MATT",
+      "subBrand": "One"
+    },
+    {
+      "code": "941004",
+      "name": "PURE LEGEND",
+      "subBrand": "One"
+    },
+    {
+      "code": "941005",
+      "name": "PRO SMOOTH PRIMER",
+      "subBrand": "One"
+    },
+    {
+      "code": "941006",
+      "name": "PRO SMOOTH PUTTY",
+      "subBrand": "One"
+    },
+    {
+      "code": "941007",
+      "name": "PURE ELEGANCE",
+      "subBrand": "One"
+    },
+    {
+      "code": "941008",
+      "name": "PURE ELEGANCE SHINE",
+      "subBrand": "One"
+    },
+    {
+      "code": "941009",
+      "name": "PURE ELEGANCE MATT",
+      "subBrand": "One"
+    },
+    {
+      "code": "941010",
+      "name": "PURE LEGEND",
+      "subBrand": "One"
+    },
+    {
+      "code": "941011",
+      "name": "PRO SMOOTH PRIMER",
+      "subBrand": "One"
+    },
+    {
+      "code": "941012",
+      "name": "PRO SMOOTH PUTTY",
+      "subBrand": "One"
+    },
+    {
+      "code": "941013",
+      "name": "PRO PUTTY+PRIMER",
+      "subBrand": "One"
+    },
+    {
+      "code": "941014",
+      "name": "PURE ELEGANCE SOFT",
+      "subBrand": "One"
+    },
+    {
+      "code": "941800",
+      "name": "PRO PUTTY+PRIMER",
+      "subBrand": "One"
+    },
+    {
+      "code": "942001",
+      "name": "EVER STAY",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "942002",
+      "name": "EVER WASH",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "942003",
+      "name": "EVER WASH SHINE",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "942004",
+      "name": "EVER CLEAR MATT",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "942005",
+      "name": "EVER CLEAR",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "942006",
+      "name": "PRO WHITE PRIMER",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "942007",
+      "name": "EVER STAY",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "942008",
+      "name": "EVER WASH",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "942009",
+      "name": "EVER WASH SHINE",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "942010",
+      "name": "EVER CLEAR MATT",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "942011",
+      "name": "EVER CLEAR",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "942012",
+      "name": "PRO WHITE PRIMER",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "942013",
+      "name": "ALPHA EVER WASH",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "943001",
+      "name": "SUPER BRIGHT 10",
+      "subBrand": "Style"
+    },
+    {
+      "code": "943002",
+      "name": "SUPER SMOOTH 10",
+      "subBrand": "Style"
+    },
+    {
+      "code": "943003",
+      "name": "COLOR SMART",
+      "subBrand": "Style"
+    },
+    {
+      "code": "943004",
+      "name": "COLOR SMART SHINE",
+      "subBrand": "Style"
+    },
+    {
+      "code": "943005",
+      "name": "PRO HIDE PRIMER",
+      "subBrand": "Style"
+    },
+    {
+      "code": "943010",
+      "name": "SUPER BRIGHT",
+      "subBrand": "Style"
+    },
+    {
+      "code": "943011",
+      "name": "SUPER SMOOTH",
+      "subBrand": "Style"
+    },
+    {
+      "code": "943100",
+      "name": "COLOR FRESH",
+      "subBrand": "Style"
+    },
+    {
+      "code": "943200",
+      "name": "COLOR SMART",
+      "subBrand": "Style"
+    },
+    {
+      "code": "943201",
+      "name": "COLOR SMART SHINE",
+      "subBrand": "Style"
+    },
+    {
+      "code": "943202",
+      "name": "ALPHA COLOR SMART",
+      "subBrand": "Style"
+    },
+    {
+      "code": "943700",
+      "name": "PRO HIDE PRIMER",
+      "subBrand": "Style"
+    },
+    {
+      "code": "943701",
+      "name": "PRO FRESH PRIMER",
+      "subBrand": "Style"
+    },
+    {
+      "code": "944001",
+      "name": "EMPA CHROMATIC",
+      "subBrand": "One"
+    },
+    {
+      "code": "944002",
+      "name": "EMPA TEXTILIA",
+      "subBrand": "One"
+    },
+    {
+      "code": "945000",
+      "name": "WALLPAPER ADHESIVE",
+      "subBrand": "One"
+    },
+    {
+      "code": "950010",
+      "name": "PU INTERIOR SEALER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950011",
+      "name": "PU EXTERIOR SEALER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950012",
+      "name": "PU INTERIOR MATTE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950013",
+      "name": "PU INTERIOR GLOSS",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950014",
+      "name": "PU EXTERIOR MATTE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950015",
+      "name": "PU EXTERIOR GLOSS",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950016",
+      "name": "PU HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950017",
+      "name": "PU COLOR SEALER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950018",
+      "name": "PU COLOR INTERIOR SATIN",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950019",
+      "name": "PU COLOR INTERIOR GLOSS",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950020",
+      "name": "PU COLOR EXTERIOR GLOSS",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950021",
+      "name": "PU COLOR INTERIOR METALIC",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950022",
+      "name": "PU COLOR SEALER HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950023",
+      "name": "PU COLOR HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950025",
+      "name": "EPOXY ISOLANT BASE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950026",
+      "name": "EPOXY ISOLANT HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950028",
+      "name": "ITALIAN PU SEALER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950029",
+      "name": "ITALIAN PU CLEAR SEALER KIT",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950030",
+      "name": "ITALIAN PU SEALER HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950031",
+      "name": "ITALIAN PU MATT",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950032",
+      "name": "IT PU MATT BASE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950033",
+      "name": "IT PU MATT HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950034",
+      "name": "ITALIAN PU GLOSS",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950035",
+      "name": "IT PU GLOSS BASE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950036",
+      "name": "IT PU GLOSS HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950037",
+      "name": "ITALIAN PU SEMI MATT",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950038",
+      "name": "IT PU MATT SEMI BASE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950039",
+      "name": "IT PU SEMI MATT HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950040",
+      "name": "PU COLOR FILLER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950041",
+      "name": "PU COLOR FILLER HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950050",
+      "name": "ALLWOOD SFX",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "950051",
+      "name": "SFX MOP/HAMMERED PEARL HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "951001",
+      "name": "MELAMINE HARDENER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "951004",
+      "name": "MELAMINE ULTRA CLEAR SEALER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "951005",
+      "name": "MELAMINE ULTRA CLEAR MATTE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "951006",
+      "name": "MELAMINE ULTRA CLEAR GLOSS",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "951500",
+      "name": "MELAMINE HARDNER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "951800",
+      "name": "MELAMINE SEALER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "951801",
+      "name": "MELAMINE MATTE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "951802",
+      "name": "MELAMINE GLOSS",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "952003",
+      "name": "NC SANDING SEALER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "952830",
+      "name": "SOFTTOUCH GLOSS",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "952831",
+      "name": "SOFTTOUCH MATTE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953001",
+      "name": "EXCEL ONE THINNER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953002",
+      "name": "EXCEL ONE SMOOTH THINNER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953003",
+      "name": "MELAMINE THINNER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953006",
+      "name": "WOOD FILLER TEAK",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953007",
+      "name": "WOOD STAIN WALNUT",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953008",
+      "name": "WOOD STAIN TEAK",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953009",
+      "name": "WOOD STAIN WENGE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953010",
+      "name": "WOOD STAIN OAKYELLOW",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953011",
+      "name": "WOOD STAIN REDBROWN",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953012",
+      "name": "WOOD STAIN ROSEWOOD",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953013",
+      "name": "WOOD STAIN CHARCOAL",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953014",
+      "name": "WOOD FILLER WALNUT",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953015",
+      "name": "WOOD FILLER WHITE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953016",
+      "name": "WOOD STAIN BLUE",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953017",
+      "name": "WOOD STAIN WALNUT-M",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953018",
+      "name": "WOOD STAIN WALNUT-J",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953019",
+      "name": "WOOD STAIN RED",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953020",
+      "name": "WOOD STAIN GREEN",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953021",
+      "name": "WOOD FILLER",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "953022",
+      "name": "WOOD STAIN",
+      "subBrand": "Allwood"
+    },
+    {
+      "code": "960001",
+      "name": "2K EPOXY FINISH",
+      "subBrand": "One"
+    },
+    {
+      "code": "960002",
+      "name": "1K EPOXY PRIMER",
+      "subBrand": "One"
+    },
+    {
+      "code": "960003",
+      "name": "2K EPOXY PRIMER",
+      "subBrand": "One"
+    },
+    {
+      "code": "960004",
+      "name": "AEROSOL",
+      "subBrand": "One"
+    },
+    {
+      "code": "961001",
+      "name": "SPARKLE GLOSS ENAMEL",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "961002",
+      "name": "SPARKLE SATIN",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "961003",
+      "name": "SPARKLE WOOD PRIMER",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "961004",
+      "name": "PRO WHITE CEMENT ST PRIMER",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "961005",
+      "name": "LUSTRE FINISH",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "961006",
+      "name": "ALUMINIUM PAINT",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "961008",
+      "name": "SPARKLE RO PRIMER",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "961009",
+      "name": "SPARKLE PU",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "961010",
+      "name": "SPARKLE YO PRIMER",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "962001",
+      "name": "COVERMAX GLOSS ENAMEL",
+      "subBrand": "Style"
+    },
+    {
+      "code": "962002",
+      "name": "PRO HIDE CEMENT ST PRIMER",
+      "subBrand": "Style"
+    },
+    {
+      "code": "962005",
+      "name": "COVER MAX RO PRIMER",
+      "subBrand": "Style"
+    },
+    {
+      "code": "963001",
+      "name": "KNIFING PASTE FILLER",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "963002",
+      "name": "CLEAR SYNTHETIC VARNISH",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "963003",
+      "name": "RETAIL_CRM OPUS GP THINNER",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970001",
+      "name": "COLORANT WHITE",
+      "subBrand": ""
+    },
+    {
+      "code": "970002",
+      "name": "COLORANT BLACK",
+      "subBrand": ""
+    },
+    {
+      "code": "970003",
+      "name": "COLORANT BLUE",
+      "subBrand": ""
+    },
+    {
+      "code": "970004",
+      "name": "COLORANT ORANGE",
+      "subBrand": ""
+    },
+    {
+      "code": "970005",
+      "name": "COLORANT MAGENTA",
+      "subBrand": ""
+    },
+    {
+      "code": "970006",
+      "name": "COLORANT GREEN",
+      "subBrand": ""
+    },
+    {
+      "code": "970007",
+      "name": "COLORANT VIOLET",
+      "subBrand": ""
+    },
+    {
+      "code": "970008",
+      "name": "COLORANT INT. YELLOW",
+      "subBrand": ""
+    },
+    {
+      "code": "970009",
+      "name": "COLORANT INT. RED",
+      "subBrand": ""
+    },
+    {
+      "code": "970010",
+      "name": "COLORANT RED OXIDE",
+      "subBrand": ""
+    },
+    {
+      "code": "970011",
+      "name": "COLORANT YELLOW OXIDE",
+      "subBrand": ""
+    },
+    {
+      "code": "970012",
+      "name": "COLORANT EXT. YELLOW",
+      "subBrand": ""
+    },
+    {
+      "code": "970013",
+      "name": "COLORANT EXT. RED",
+      "subBrand": ""
+    },
+    {
+      "code": "970014",
+      "name": "COLORANT EXTERIOR HIGH DURABLE RED",
+      "subBrand": ""
+    },
+    {
+      "code": "970015",
+      "name": "COLORANT EXTERIOR HIGH DURABLE YELLOW",
+      "subBrand": ""
+    },
+    {
+      "code": "970016",
+      "name": "COLORANT SPECIAL WHITE",
+      "subBrand": ""
+    },
+    {
+      "code": "970017",
+      "name": "STAINER BLACK",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970018",
+      "name": "STAINER FAST BLUE",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970019",
+      "name": "STAINER FAST GREEN",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970020",
+      "name": "STAINER FAST RED",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970021",
+      "name": "STAINER FAST VIOLET",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970022",
+      "name": "STAINER FAST YELLOW",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970023",
+      "name": "STAINER RED OXIDE",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970024",
+      "name": "STAINER YELLOW OXIDE",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970025",
+      "name": "SB COLORANT WHITE",
+      "subBrand": ""
+    },
+    {
+      "code": "970026",
+      "name": "SB COLORANT MEDIUM YELLOW",
+      "subBrand": ""
+    },
+    {
+      "code": "970027",
+      "name": "SB COLORANT ORANGE",
+      "subBrand": ""
+    },
+    {
+      "code": "970028",
+      "name": "SB COLORANT LEMON YELLOW",
+      "subBrand": ""
+    },
+    {
+      "code": "970029",
+      "name": "SB COLORANT GREEN",
+      "subBrand": ""
+    },
+    {
+      "code": "970030",
+      "name": "SB COLORANT HT BLACK",
+      "subBrand": ""
+    },
+    {
+      "code": "970031",
+      "name": "SB COLORANT HP RED",
+      "subBrand": ""
+    },
+    {
+      "code": "970032",
+      "name": "SB COLORANT MAGENTA",
+      "subBrand": ""
+    },
+    {
+      "code": "970033",
+      "name": "SB COLORANT BLUE",
+      "subBrand": ""
+    },
+    {
+      "code": "970034",
+      "name": "SB COLORANT RED OXIDE",
+      "subBrand": ""
+    },
+    {
+      "code": "970035",
+      "name": "SB COLORANT YELLOW OXIDE",
+      "subBrand": ""
+    },
+    {
+      "code": "970036",
+      "name": "SB COLORANT VIOLET",
+      "subBrand": ""
+    },
+    {
+      "code": "970037",
+      "name": "STAINER ORANGE",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970038",
+      "name": "STAINER FAST YELLOW GREEN",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970039",
+      "name": "STAINER MAGENTA",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970040",
+      "name": "STAINER BURNT SIENNA",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970041",
+      "name": "STAINER TURKEY UMBER",
+      "subBrand": "Style"
+    },
+    {
+      "code": "970042",
+      "name": "STAINER FIRE RED",
+      "subBrand": "Style"
+    },
+    {
+      "code": "971001",
+      "name": "TOTAL 2K",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "971002",
+      "name": "TOTAL 2K FLEX",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "971003",
+      "name": "CRACK MASTER PASTE",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "971004",
+      "name": "REPAIR MASTER",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "971005",
+      "name": "TOTAL 2K LIQUID",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "971006",
+      "name": "TOTAL 2K POWDER",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "971007",
+      "name": "TOTAL 2K FLEX LIQUID",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "971008",
+      "name": "TOTAL 2K FLEX POWDER",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "971009",
+      "name": "ALLDRY TOTAL LOCK",
+      "subBrand": "Alldry"
+    },
+    {
+      "code": "972001",
+      "name": "PAINTER S MT 1 INCH",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972002",
+      "name": "PAINTER S MT 1.5 INCH",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972003",
+      "name": "PAINTER S MT 2 INCH",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972102",
+      "name": "DRY SP 120",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972103",
+      "name": "DRY SP 150",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972104",
+      "name": "DRY SP 180",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972105",
+      "name": "DRY SP 220",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972106",
+      "name": "DRY SP 320",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972122",
+      "name": "WP SANDPAPER 120",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972123",
+      "name": "WP SANDPAPER 150",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972124",
+      "name": "WP SANDPAPER 180",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972125",
+      "name": "WP SANDPAPER 220",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972126",
+      "name": "WP SANDPAPER 320",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972200",
+      "name": "4 & 6 INCH FOAM ROLLER",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972211",
+      "name": "4 & 6 INCH FELT ROLLER",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972212",
+      "name": "9 INCH INT FELT ROLLER",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972215",
+      "name": "9 INCH EXT FELT ROLLER",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972301",
+      "name": "SP. EF. COMB",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972302",
+      "name": "CLOUD ROLLER",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972303",
+      "name": "NATURA BRUSH",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972304",
+      "name": "DUNE TOOL",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972305",
+      "name": "DENIM BRUSH",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972306",
+      "name": "STENCIL",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972307",
+      "name": "SPATULA",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "972310",
+      "name": "HY CB ROLLER",
+      "subBrand": "Artist"
+    },
+    {
+      "code": "974001",
+      "name": "COMPANY PS",
+      "subBrand": "Calista"
+    },
+    {
+      "code": "974001",
+      "name": "COMPANY PS",
+      "subBrand": "Sample Kit"
+    },
+    {
+      "code": "976001",
+      "name": "ECO GRADE PAINT",
+      "subBrand": ""
+    },
+    {
+      "code": "976002",
+      "name": "ECO GRADE PAINT",
+      "subBrand": ""
+    },
+    {
+      "code": "999002",
+      "name": "PASS INTERIOR",
+      "subBrand": "Collaterals"
+    },
+    {
+      "code": "999003",
+      "name": "PASS EXTERIOR",
+      "subBrand": "Collaterals"
+    },
+    {
+      "code": "999004",
+      "name": "PASS ENAMEL",
+      "subBrand": "Collaterals"
+    },
+    {
+      "code": "999007",
+      "name": "RANGE BROCHURE",
+      "subBrand": "Collaterals"
+    },
+    {
+      "code": "999008",
+      "name": "COMMON POS",
+      "subBrand": "Collaterals"
+    },
+    {
+      "code": "999042",
+      "name": "ENGLISH CONTEST",
+      "subBrand": "Collaterals"
+    },
+    {
+      "code": "999043",
+      "name": "ENGLISH CONTEST",
+      "subBrand": "Collaterals"
+    },
+    {
+      "code": "999044",
+      "name": "WOOD KIT MELAMINE",
+      "subBrand": "Collaterals"
+    },
+    {
+      "code": " NOTEPAD",
+      "name": " KEYCHAIN",
+      "subBrand": ""
+    },
+    {
+      "code": "1NOTEPAD",
+      "name": "2 PENS",
+      "subBrand": ""
+    }
+  ]
+}

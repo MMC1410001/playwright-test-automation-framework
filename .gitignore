@@ -1,0 +1,38 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Environment variables
+.env
+
+# Sensitive credentials
+tests/e2e/Saas/utils/fixtures/admin-credentials.json
+**/admin-credentials.json
+*.credentials.json
+
+# Private keys / certificates — never commit. SFA JWT signing key lives in
+# ~/.retail-crm-sfa/sfa_jwt_private.pem (see tests/api/retail_crm_chatbot/SFA_KnowAboutProduct_README.md)
+*.pem
+*.key
+*.p12
+*.pfx
+sfa_jwt_private*
+.env.*.local
+
+# Media files
+*.img
+*.png
+*.jpg
+*.jpeg
+*.mp3
+*.mp4
+*.mov
+*.webm
+*.log
+*.wav
+*.m4a
+*.ogg

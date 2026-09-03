@@ -1,0 +1,40 @@
+# name: Run Tests
+#
+# on:
+#   workflow_dispatch:
+#
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+#
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v3
+#
+#     - name: Setup Node.js
+#       uses: actions/setup-node@v3
+#       with:
+#         node-version: 18
+#
+#     - name: Install dependencies
+#       run: |
+#         npm install -D @playwright/test
+#         npx playwright install
+#
+#     - name: Run Playwright tests
+#       run: npx playwright test tests/e2e tests/api
+#
+#     - name: Install K6
+#       run: |
+#         sudo apt update
+#         sudo apt install -y gnupg software-properties-common
+#         curl -s https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6-archive-keyring.gpg
+#         echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+#         sudo apt update
+#         sudo apt install -y k6
+#
+#     - name: Run K6 performance tests
+#       run: |
+#         k6 run tests/performance/about.k6.js || true
+#         k6 run tests/performance/blogs.k6.js || true
+#         k6 run tests/performance/chatbot.k6.js || true

@@ -1,0 +1,2 @@
+# Ignore saved session files — they contain auth tokens
+*.json

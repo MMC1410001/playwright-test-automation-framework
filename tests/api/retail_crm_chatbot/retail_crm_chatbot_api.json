@@ -1,0 +1,1645 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "RetailCrm Opus Product Assistant API",
+    "description": "\n## Overview\nHTTP API for the RetailCrm Opus product assistant: phone OTP login, RAG chat (sync and SSE stream),\nchat sessions, speech-to-text upload, per-message feedback, and the SFA \"Know About Product\" lookup.\n\n## Authentication (Bearer JWT)\nWhen the server sets **`API_JWT_SECRET`** and **`API_REQUIRE_JWT=true`**, these prefixes require the header\n**`Authorization: Bearer`** followed by the `access_token` string from verify-otp: `/api/chat`, `/api/voice`, `/api/feedback`.\n\n## Authentication (SFA API key)\n`/api/v1/product/know-about-product` is separate from the JWT scheme above: it requires header\n**`X-API-KEY`** (**`SFA_KNOW_PRODUCT_API_KEY`**) and, if **`SFA_ALLOWED_IPS`** is set, a whitelisted\nsource IP. Failures use `{\"status\":\"FAILURE\",\"errorCode\":...,\"message\":...}`, not `{\"detail\":...}`.\n\n- Obtain **`access_token`** from **`POST /api/auth/verify-otp`** (field is omitted if JWT is not configured).\n- **`/api/auth/*`**, **`/health`**, **`/`**, **`/info`**, and OpenAPI paths are not JWT-gated.\n- If JWT is required but the server has no secret, protected routes return **503** with a configuration message.\n\nWhen JWT is optional but a valid Bearer token is sent, **`user_id` / `persona` from the token override**\nquery/body on chat session routes (see router docstrings).\n\n## Typical client flow\n1. **`POST /api/auth/request-otp`** with a whitelisted 10-digit phone.\n2. **`POST /api/auth/verify-otp`** with phone + 6-digit OTP → store **`user_id`**, **`session_id`**, and **`access_token`** if present.\n3. **`POST /api/chat/query`** or **`/api/chat/query/stream`** with JSON body; add Bearer header when enforced.\n4. Optional: **`POST /api/voice/transcribe`** (multipart file), **`POST /api/feedback/{message_id}`**.\n\n## QA — common HTTP status codes\n| Code | Where | Meaning |\n|------|--------|---------|\n| **400** | Feedback | Invalid `rating` value |\n| **401** | Auth / JWT | Bad OTP; missing or invalid Bearer when JWT required |\n| **403** | Auth | Phone not whitelisted, inactive account, or OTP request throttled |\n| **404** | Chat sessions | Unknown `session_id` |\n| **413** | Voice | Audio larger than `VOICE_MAX_UPLOAD_BYTES` |\n| **422** | Voice / Pydantic | Unprocessable audio or request validation failure |\n| **429** | Global | Rate limit (`ENABLE_RATE_LIMIT=true`) |\n| **500** | Any | Unexpected server error (generic message to client) |\n| **503** | Voice / JWT | STT not configured; or JWT enforcement misconfigured |\n\n## Configuration pointers\n- **CORS**: `CORS_ORIGINS` (JSON array in env). Use explicit origins in production.\n- **Rate limit**: `ENABLE_RATE_LIMIT`, `DEFAULT_RATE_LIMIT`.\n- **Pipeline**: `GET /info` returns whether **router+composer** or **legacy** flow is active.\n",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/auth/request-otp": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Send OTP to a whitelisted phone",
+        "description": "Request OTP for a phone number.\n\nThe phone number's persona is determined from the MongoDB whitelisted_users collection.\nReturns a one-time ``login_challenge`` that must be sent back on ``verify-otp``.",
+        "operationId": "request_otp_api_auth_request_otp_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OTPRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success message when an OTP is generated and send is accepted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OTPRequestResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/verify-otp": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Verify OTP and return session profile",
+        "description": "Verify OTP and log in.\n\nBy default returns only ``{ok: true}`` and sets an HttpOnly auth cookie.\nCall ``GET /api/auth/me`` with credentials to load user profile and session id.",
+        "operationId": "verify_otp_api_auth_verify_otp_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OTPVerifyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Minimal login body; JWT in HttpOnly cookie (and optionally body).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Rotate refresh token and mint a new access token",
+        "description": "Issue a new short-lived access token using an HttpOnly refresh token cookie.",
+        "operationId": "refresh_api_auth_refresh_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Return the authenticated user profile",
+        "description": "Validate the current JWT (Bearer or HttpOnly cookie) and return profile from MongoDB.\n\nFrontends should call this after OTP verify instead of storing profile data in localStorage.",
+        "operationId": "auth_me_api_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthMeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Logout and invalidate API tokens for this user",
+        "description": "Invalidate this device's JWT and clear the auth cookie (other devices stay signed in).",
+        "operationId": "logout_api_auth_logout_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat/query": {
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Run one product assistant turn (JSON response)",
+        "description": "Process a user query. Uses router+composer pipeline (product catalog, JSON, RAG) when `USE_ROUTER_COMPOSER=true`.\nRuns blocking work in a thread pool so the event loop stays responsive under load.\n\n**Body**: `query` (required), optional `session_id` for conversation memory.\n**Query**: `user_id`, `persona` — JWT ``sub`` wins; persona follows profile when Bearer token is valid.\n**Response**: see `QueryResponse` (answer markdown, citations, timings, `message_id` for feedback).",
+        "operationId": "process_query_api_chat_query_post",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "User ID (default: anonymous)",
+              "default": "anonymous",
+              "title": "User Id"
+            },
+            "description": "User ID (default: anonymous)"
+          },
+          {
+            "name": "persona",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Persona: dealer or internal",
+              "default": "dealer",
+              "title": "Persona"
+            },
+            "description": "Persona: dealer or internal"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat/query/stream": {
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Stream one assistant turn (Server-Sent Events)",
+        "description": "Server-Sent Events stream of the same pipeline as POST /query.\n\nEvents are JSON lines in SSE ``data:`` frames:\n- ``{\"type\":\"delta\",\"text\":\"...\"}`` — incremental answer text (raw model stream; may be temporarily invalid Markdown mid-stream).\n- ``{\"type\":\"final\",\"payload\":{...}}`` — same shape as non-streaming ``QueryResponse`` (response, citations, message_id, metadata, timings). Clients should treat ``payload[\"response\"]`` as the canonical assistant markdown once received (replace or reconcile streamed content with this string for correct GFM rendering).\n- ``{\"type\":\"error\",\"message\":\"...\"}`` — unrecoverable failure in the worker thread.\n\nRetrieval/routing runs before the first delta; time-to-first-token is lower than waiting for the full JSON body on ``/query``.\n\n**429** (plain JSON, not SSE — raised before the stream opens) when the caller's daily token\nquota (``DAILY_TOKEN_LIMIT``) is already used up; body shape matches ``POST /query``'s 429.",
+        "operationId": "process_query_stream_api_chat_query_stream_post",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "User ID (default: anonymous)",
+              "default": "anonymous",
+              "title": "User Id"
+            },
+            "description": "User ID (default: anonymous)"
+          },
+          {
+            "name": "persona",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Persona: dealer or internal",
+              "default": "dealer",
+              "title": "Persona"
+            },
+            "description": "Persona: dealer or internal"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat/sessions": {
+      "get": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "List recent chat sessions for a user",
+        "description": "Return up to `limit` sessions ordered for this user (Mongo-backed).\n\n`user_id` query is ignored for identity when a valid JWT supplies `sub`.",
+        "operationId": "get_sessions_api_chat_sessions_get",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "User id",
+              "title": "User Id"
+            },
+            "description": "User id"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Max sessions to return",
+              "default": 10,
+              "title": "Limit"
+            },
+            "description": "Max sessions to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SessionResponse"
+                  },
+                  "title": "Response Get Sessions Api Chat Sessions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Create a new empty chat session",
+        "description": "Create a session row for the authenticated user (JWT ``sub`` when Bearer token is valid).\n\nIf ``user_id`` in the body differs from the JWT subject, returns **403** (not a silent override).\n``persona`` in the body may be ``dealer`` or ``internal`` (need not match the JWT profile).",
+        "operationId": "create_session_api_chat_sessions_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat/sessions/{session_id}/messages": {
+      "get": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Fetch transcript for a session",
+        "description": "Return messages for `session_id`, optionally capped to the last `limit_pairs` Q&A pairs.\n\n**404** if the session does not exist. **403** if the session belongs to another user.\nAssistant messages include `message_id` for `POST /api/feedback/{message_id}`.",
+        "operationId": "get_session_messages_api_chat_sessions__session_id__messages_get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "limit_pairs",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 2000,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Return at most the last N Q&A pairs (sliding window). Omit for full thread unless SESSION_API_MESSAGES_MAX_PAIRS is set.",
+              "title": "Limit Pairs"
+            },
+            "description": "Return at most the last N Q&A pairs (sliding window). Omit for full thread unless SESSION_API_MESSAGES_MAX_PAIRS is set."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MessageResponse"
+                  },
+                  "title": "Response Get Session Messages Api Chat Sessions  Session Id  Messages Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat/sessions/{session_id}": {
+      "patch": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Rename a session (title)",
+        "description": "Set the session title. **404** if `session_id` is unknown. **403** if not the owner.",
+        "operationId": "update_session_api_chat_sessions__session_id__patch",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Archive (soft-delete) a session",
+        "description": "Soft-archive session (``is_active=false``); transcript remains readable via GET messages.\n\n**404** if `session_id` is unknown. **403** if not the owner.",
+        "operationId": "archive_session_api_chat_sessions__session_id__delete",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/feedback/{message_id}": {
+      "post": {
+        "tags": [
+          "feedback"
+        ],
+        "summary": "Rate an assistant message",
+        "description": "Persist ``rating`` for the assistant Q&A row identified by ``message_id``.",
+        "operationId": "submit_feedback_api_feedback__message_id__post",
+        "parameters": [
+          {
+            "name": "message_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Message Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/voice/transcribe": {
+      "post": {
+        "tags": [
+          "voice"
+        ],
+        "summary": "Transcribe uploaded audio to text",
+        "description": "Transcribe uploaded audio (e.g. WebM/Opus from MediaRecorder) via configured STT provider.\n\nProvider is selected via settings `VOICE_STT_PROVIDER`:\n- google (default): Google Cloud Speech-to-Text\n- deepgram: Deepgram STT (paid; supports multilingual detection)\n- sarvam: Sarvam Saaras STT (REST)\n- soniox: Soniox STT (REST)",
+        "operationId": "transcribe_audio_endpoint_api_voice_transcribe_post",
+        "parameters": [
+          {
+            "name": "language_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "BCP-47 language, e.g. en-IN, hi-IN",
+              "default": "en-IN",
+              "title": "Language Code"
+            },
+            "description": "BCP-47 language, e.g. en-IN, hi-IN"
+          },
+          {
+            "name": "sample_rate_hertz",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 96000,
+              "minimum": 8000,
+              "default": 48000,
+              "title": "Sample Rate Hertz"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_transcribe_audio_endpoint_api_voice_transcribe_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON object with a single `transcript` string.",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/know-about-product": {
+      "post": {
+        "tags": [
+          "sfa-integration"
+        ],
+        "summary": "Consolidated product knowledge for SFA (Product Info, Benefits, Competitor Details, Sales Pitch)",
+        "description": "Look up one product by code; return the 4 sections from the BFRD (v1.0, 09-Jul-2026).\n\nRequires header ``X-API-KEY``, (if ``SFA_ALLOWED_IPS`` is configured) a whitelisted source IP,\nand ``Authorization: Bearer \u003Cjwt\u003E`` identifying the calling TSM — see ``require_sfa_api_access``.\n**400** ``INVALID_PRODUCT_CODE`` for a missing/malformed code, **404** ``PRODUCT_NOT_FOUND`` if\nit does not resolve in the product catalog.",
+        "operationId": "know_about_product_api_v1_product_know_about_product_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KnowAboutProductRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnowAboutProductResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "meta"
+        ],
+        "summary": "Service banner",
+        "description": "Minimal JSON with API title, version, and running status. Suitable for smoke checks.",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "meta"
+        ],
+        "summary": "Liveness probe",
+        "description": "Kubernetes/load-balancer style liveness. Does not verify MongoDB, STT, or LLM backends.",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/info": {
+      "get": {
+        "tags": [
+          "meta"
+        ],
+        "summary": "Pipeline and version info",
+        "description": "Return which answer pipeline is active (**router_composer** vs **legacy_agent**) and a short description.\n\nUse this after deploys to confirm `USE_ROUTER_COMPOSER` and related behavior without sending a chat query.",
+        "operationId": "info_info_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthMeResponse": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username"
+          },
+          "persona": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Persona"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "employee_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Employee Id"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id",
+            "description": "Active chat session id for this user (from MongoDB)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "title": "AuthMeResponse",
+        "description": "Authenticated user profile from server state (call after verify-otp; do not cache in localStorage)."
+      },
+      "Body_transcribe_audio_endpoint_api_voice_transcribe_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_transcribe_audio_endpoint_api_voice_transcribe_post"
+      },
+      "CompetitorDetail": {
+        "properties": {
+          "competitorName": {
+            "type": "string",
+            "title": "Competitorname",
+            "description": "Known competitor brand(s) mentioned in the KB answer, if any.",
+            "default": ""
+          },
+          "competitorProduct": {
+            "type": "string",
+            "title": "Competitorproduct",
+            "default": ""
+          },
+          "comparisonPoints": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Comparisonpoints"
+          },
+          "ourAdvantage": {
+            "type": "string",
+            "title": "Ouradvantage",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "title": "CompetitorDetail",
+        "description": "One entry of the \"Competitor Details\" list."
+      },
+      "CreateSessionRequest": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User Id",
+            "description": "User ID (must match JWT sub when authenticated)"
+          },
+          "persona": {
+            "type": "string",
+            "title": "Persona",
+            "description": "Session persona: dealer or internal (may differ from profile; not required to match JWT)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "persona"
+        ],
+        "title": "CreateSessionRequest"
+      },
+      "FeedbackRequest": {
+        "properties": {
+          "rating": {
+            "type": "string",
+            "title": "Rating",
+            "description": "Feedback rating (helpful or not_helpful)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rating"
+        ],
+        "title": "FeedbackRequest"
+      },
+      "FeedbackResponse": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Human-readable result for clients and QA."
+          }
+        },
+        "type": "object",
+        "required": [
+          "success",
+          "message"
+        ],
+        "title": "FeedbackResponse",
+        "description": "Outcome of a feedback submission."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "KnowAboutProductRequest": {
+        "properties": {
+          "productCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Productcode",
+            "description": "Unique product code, e.g. 950001"
+          },
+          "requestId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requestid",
+            "description": "Caller-supplied id for traceability/logging"
+          }
+        },
+        "type": "object",
+        "title": "KnowAboutProductRequest",
+        "description": "SFA \"Know About Product\" lookup. Fields are optional here so a missing/malformed\n``productCode`` produces the BFRD's 400 ``INVALID_PRODUCT_CODE`` envelope (via the route\nhandler) instead of a generic FastAPI 422."
+      },
+      "KnowAboutProductResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "SUCCESS"
+          },
+          "productCode": {
+            "type": "string",
+            "title": "Productcode"
+          },
+          "requestId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requestid"
+          },
+          "productInfo": {
+            "$ref": "#/components/schemas/ProductInfoSection"
+          },
+          "productBenefits": {
+            "items": {
+              "$ref": "#/components/schemas/ProductBenefit"
+            },
+            "type": "array",
+            "title": "Productbenefits"
+          },
+          "competitorDetails": {
+            "items": {
+              "$ref": "#/components/schemas/CompetitorDetail"
+            },
+            "type": "array",
+            "title": "Competitordetails"
+          },
+          "salesPitch": {
+            "$ref": "#/components/schemas/SalesPitchSection"
+          }
+        },
+        "type": "object",
+        "required": [
+          "productCode",
+          "productInfo",
+          "salesPitch"
+        ],
+        "title": "KnowAboutProductResponse",
+        "description": "Response contract for ``POST /api/v1/product/know-about-product``.\n\nMatches the BFRD \"Know About Product API\" (v1.0, 09-Jul-2026) sample response shape."
+      },
+      "LoginResponse": {
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "title": "Ok",
+            "description": "OTP verified and session established.",
+            "default": true
+          },
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id",
+            "description": "Legacy: Mongo user id (use /api/auth/me instead)."
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username",
+            "description": "Legacy: phone (use /api/auth/me instead)."
+          },
+          "persona": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Persona",
+            "description": "Legacy: persona (use /api/auth/me instead)."
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "description": "Legacy: display name (use /api/auth/me instead)."
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id",
+            "description": "Legacy: chat session id (use /api/auth/me instead)."
+          },
+          "access_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Access Token",
+            "description": "Bearer JWT when API_AUTH_RETURN_TOKEN_IN_BODY=true; otherwise use HttpOnly auth cookie."
+          }
+        },
+        "type": "object",
+        "title": "LoginResponse",
+        "description": "Successful OTP verification.\n\nDefault (``API_AUTH_MINIMAL_LOGIN_RESPONSE=true``): only ``ok`` (+ HttpOnly cookie).\nLegacy mode includes profile fields — prefer ``GET /api/auth/me`` instead of persisting them client-side."
+      },
+      "MessageResponse": {
+        "properties": {
+          "role": {
+            "type": "string",
+            "title": "Role",
+            "description": "`user` or `assistant`."
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "message_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message Id",
+            "description": "Populated for assistant turns; use with `POST /api/feedback/{message_id}`."
+          },
+          "citations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Citations"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "role",
+          "content"
+        ],
+        "title": "MessageResponse",
+        "description": "Single message in a transcript (`GET .../messages` returns an ordered list)."
+      },
+      "OTPRequest": {
+        "properties": {
+          "phone_number": {
+            "type": "string",
+            "title": "Phone Number",
+            "description": "10-digit phone number (or +91 / 91 prefix)"
+          },
+          "persona": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Persona",
+            "description": "Deprecated – determined from MongoDB"
+          }
+        },
+        "type": "object",
+        "required": [
+          "phone_number"
+        ],
+        "title": "OTPRequest"
+      },
+      "OTPRequestResponse": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Human-readable status."
+          },
+          "login_challenge": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Login Challenge",
+            "description": "One-time id to send on verify-otp; binds login to this OTP request."
+          }
+        },
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "OTPRequestResponse",
+        "description": "OTP requested successfully; client must retain ``login_challenge`` for verify-otp."
+      },
+      "OTPVerifyRequest": {
+        "properties": {
+          "phone_number": {
+            "type": "string",
+            "title": "Phone Number",
+            "description": "10-digit phone number (or +91 / 91 prefix)"
+          },
+          "otp": {
+            "type": "string",
+            "title": "Otp",
+            "description": "6-digit OTP"
+          },
+          "login_challenge": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Login Challenge",
+            "description": "One-time value from POST /api/auth/request-otp; required when AUTH_REQUIRE_LOGIN_CHALLENGE is enabled."
+          },
+          "persona": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Persona",
+            "description": "Deprecated – determined from MongoDB"
+          }
+        },
+        "type": "object",
+        "required": [
+          "phone_number",
+          "otp"
+        ],
+        "title": "OTPVerifyRequest"
+      },
+      "ObjectionHandlingItem": {
+        "properties": {
+          "objection": {
+            "type": "string",
+            "title": "Objection"
+          },
+          "response": {
+            "type": "string",
+            "title": "Response"
+          }
+        },
+        "type": "object",
+        "required": [
+          "objection",
+          "response"
+        ],
+        "title": "ObjectionHandlingItem"
+      },
+      "ProductBenefit": {
+        "properties": {
+          "benefitTitle": {
+            "type": "string",
+            "title": "Benefittitle",
+            "description": "Short lead-in when the source bullet has one (e.g. bolded label); else empty.",
+            "default": ""
+          },
+          "benefitDescription": {
+            "type": "string",
+            "title": "Benefitdescription",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "title": "ProductBenefit",
+        "description": "One entry of the \"Product Benefits\" list."
+      },
+      "ProductInfoSection": {
+        "properties": {
+          "productName": {
+            "type": "string",
+            "title": "Productname",
+            "default": ""
+          },
+          "category": {
+            "type": "string",
+            "title": "Category",
+            "default": ""
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "description": "KB-grounded overview (router+composer answer for this product).",
+            "default": ""
+          },
+          "specifications": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Specifications",
+            "description": "Reserved for structured spec key/values; empty until a structured spec schema exists in the KB."
+          }
+        },
+        "type": "object",
+        "title": "ProductInfoSection",
+        "description": "\"Product Info\" section of the Know About Product API."
+      },
+      "QueryRequest": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "description": "User's question"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id",
+            "description": "Session ID (optional for single-query; required for follow-ups)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "title": "QueryRequest"
+      },
+      "QueryResponse": {
+        "properties": {
+          "response": {
+            "type": "string",
+            "title": "Response",
+            "description": "Assistant answer (Markdown/GFM)."
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "citations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Citations"
+          },
+          "message_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message Id"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metadata"
+          },
+          "retrieval_time_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retrieval Time Ms",
+            "description": "Wall-clock ms for the router retrieval phase: session-backed context merge, parallel product resolution / intent refinement, route() (catalog + RAG + JSON store), and compose(). Excludes the main answer LLM. For vector/SQL index latency only, see qdrant_vector_query_time_ms and sqlite_index_query_time_ms."
+          },
+          "llm_time_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Time Ms",
+            "description": "Wall-clock ms for the main answer LLM call (generate/stream through completion). 0 when served from cache, composer-only, or fixed responses."
+          },
+          "total_time_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Time Ms",
+            "description": "Wall-clock ms for the full server-side query handler (same perf_counter origin as stream_time_to_first_chunk_ms): load, routing, generation, persistence."
+          },
+          "qdrant_vector_query_time_ms": {
+            "type": "integer",
+            "title": "Qdrant Vector Query Time Ms",
+            "description": "Sum of wall-clock ms spent inside Qdrant client query_points calls for this request (0 if none ran).",
+            "default": 0
+          },
+          "sqlite_index_query_time_ms": {
+            "type": "integer",
+            "title": "Sqlite Index Query Time Ms",
+            "description": "Sum of wall-clock ms spent executing SQL on the KB JSON SQLite index (json_store) for this request (0 if none ran).",
+            "default": 0
+          },
+          "stream_time_to_first_chunk_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stream Time To First Chunk Ms",
+            "description": "Streaming: ms from the same server-side start as total_time_ms until the first non-empty model text delta. If there was no streamed delta, set to max(0, total_time_ms - llm_time_ms) so clients always get a number (approx. pre-main-LLM wall); not identical to true TTFT in that case."
+          }
+        },
+        "type": "object",
+        "required": [
+          "response",
+          "confidence"
+        ],
+        "title": "QueryResponse",
+        "description": "Non-streaming chat response: answer text, citations, ids, and optional timings."
+      },
+      "SalesPitchSection": {
+        "properties": {
+          "openingLine": {
+            "type": "string",
+            "title": "Openingline",
+            "default": ""
+          },
+          "keySellingPoints": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Keysellingpoints"
+          },
+          "objectionHandling": {
+            "items": {
+              "$ref": "#/components/schemas/ObjectionHandlingItem"
+            },
+            "type": "array",
+            "title": "Objectionhandling"
+          },
+          "closingTip": {
+            "type": "string",
+            "title": "Closingtip",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "title": "SalesPitchSection",
+        "description": "\"Sales Pitch (How to Sell)\" section of the Know About Product API."
+      },
+      "SessionResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "Session id; send as `session_id` on chat requests for threading."
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id",
+            "description": "Owner user id."
+          },
+          "persona": {
+            "type": "string",
+            "title": "Persona"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          },
+          "message_count": {
+            "type": "integer",
+            "title": "Message Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "user_id",
+          "persona",
+          "started_at",
+          "updated_at",
+          "is_active",
+          "message_count"
+        ],
+        "title": "SessionResponse",
+        "description": "One chat session row as returned by list/create session APIs."
+      },
+      "UpdateSessionRequest": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "description": "New session title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "UpdateSessionRequest"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "meta",
+      "description": "Service metadata: root banner, health probe, pipeline info. No authentication required."
+    },
+    {
+      "name": "auth",
+      "description": "Phone-based OTP login. Persona and display name come from MongoDB `whitelisted_users`. After `verify-otp`, persist `user_id` and optional `access_token` for subsequent API calls."
+    },
+    {
+      "name": "chat",
+      "description": "Product Q&A (`/query`, `/query/stream`) and session CRUD. Use `session_id` from the body for threaded follow-ups. When a JWT is present, effective user/persona may be taken from the token (see app description)."
+    },
+    {
+      "name": "voice",
+      "description": "Speech-to-text: upload audio (e.g. WebM from `MediaRecorder`). Provider is `VOICE_STT_PROVIDER` (google, deepgram, sarvam, soniox). Expect **422** for corrupt/too-small audio, **503** if STT is not configured."
+    },
+    {
+      "name": "feedback",
+      "description": "Submit helpful / not_helpful for an assistant turn. `message_id` is the identifier returned on chat responses (assistant message)."
+    },
+    {
+      "name": "sfa-integration",
+      "description": "Know About Product API for the Sales Force Automation (SFA) platform: consolidated Product Info, Benefits, Competitor Details, and Sales Pitch by product code. Requires header `X-API-KEY`; optionally restricted to whitelisted IPs (`SFA_KNOW_PRODUCT_API_KEY` / `SFA_ALLOWED_IPS`). Error body shape differs from the rest of this API: `{\"status\":\"FAILURE\",\"errorCode\":...,\"message\":...}`."
+    }
+  ]
+}

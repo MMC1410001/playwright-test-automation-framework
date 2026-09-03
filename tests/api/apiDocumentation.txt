@@ -1,0 +1,214 @@
+# Advisor Demo.ai API Documentation & Testing Guide
+
+## Overview
+
+Advisor Demo.ai is an AI-powered tax planning platform for India that offers various APIs for tax calculations, AI-powered tax assistance, and content management. This documentation covers all the available APIs discovered through comprehensive testing.
+
+## Base URLs
+
+- **Main Website**: `https://the-internet.herokuapp.com`
+- **Backend API**: `https://the-internet.herokuapp.com`
+- **AI/Chat Bot**: `https://the-internet.herokuapp.com`
+- **Tax Calculator**: `https://jsonplaceholder.typicode.com`
+
+## API Endpoints
+
+### 1. Chat/AI APIs
+
+#### 1.1 Chat Stream API (Primary)
+- **Endpoint**: `POST https://the-internet.herokuapp.com/chat/stream`
+- **Purpose**: Main AI chat interface for tax-related queries
+- **Authentication**: Not required for basic usage
+- **Request Format**:
+```json
+{
+  "message": "What are the tax slabs for FY 2025-26?",
+  "conversation_id": "unique-conversation-id",
+  "context": "tax_planning"
+}
+```
+- **Response**: Streaming response with AI-generated tax advice
+- **Test Strategy**: Send various tax-related questions and verify responses
+
+#### 1.2 Chat Links Utility API
+- **Endpoint**: `POST https://the-internet.herokuapp.com/chat/links_util`
+- **Purpose**: Handles link processing and utilities during chat interactions
+- **Authentication**: Not required
+- **Triggered**: Automatically during certain chat interactions
+- **Test Strategy**: Monitor during chat sessions with complex queries
+
+#### 1.3 Backend AI API
+- **Endpoint**: `POST https://the-internet.herokuapp.com/bot/ai`
+- **Purpose**: Alternative AI endpoint (requires authentication)
+- **Authentication**: Required (returns 401 without proper auth)
+- **Request Format**:
+```json
+{
+  "query": "Tax query here",
+  "context": "tax_planning",
+  "user_session": "session_token"
+}
+```
+- **Test Strategy**: Test authentication requirements and error handling
+
+#### 1.4 Chat Polling API
+- **Endpoint**: `GET https://the-internet.herokuapp.com/bot/chat`
+- **Purpose**: Polling endpoint for chat status (currently returns 400)
+- **Authentication**: May be required
+- **Test Strategy**: Test for proper error handling and status codes
+
+### 2. Tax Calculator APIs
+
+#### 2.1 Old vs New Tax Regime Calculator
+- **Endpoint**: `POST https://jsonplaceholder.typicode.com/website/old_vs_new`
+- **Purpose**: Compare tax liability between old and new tax regimes
+- **Authentication**: Not required
+- **Request Format**:
+```json
+{
+  "financial_year": "2025-26",
+  "age_group": "0-59",  // Options: "0-59", "60-79", "80 and above"
+  "salary_income": 800000,
+  "other_income": 50000,
+  "deductions": {
+    "section_80c": 150000,
+    "hra_exemption": 100000,
+    "health_insurance": 25000,
+    "home_loan_interest": 200000,
+    "nps_contribution": 50000
+  }
+}
+```
+- **Response Format**:
+```json
+{
+  "old_regime": {
+    "taxable_income": 450000,
+    "income_tax": 10000,
+    "rebate": 10000,
+    "surcharge": 0,
+    "cess": 0,
+    "total_tax": 0
+  },
+  "new_regime": {
+    "taxable_income": 425000,
+    "income_tax": 1250,
+    "rebate": 1250,
+    "surcharge": 0,
+    "cess": 0,
+    "total_tax": 0
+  }
+}
+```
+- **Test Scenarios**:
+  - Low income (below tax threshold)
+  - Medium income (₹5-15 lakhs)
+  - High income (above ₹15 lakhs)
+  - Senior citizens (60+ age group)
+  - Super senior citizens (80+ age group)
+  - Various deduction combinations
+
+### 3. Blog/Content APIs
+
+#### 3.1 All Blogs API
+- **Endpoint**: `GET https://the-internet.herokuapp.com/blog/allblogs`
+- **Purpose**: Fetch all blog posts and articles
+- **Authentication**: Not required
+- **Response Format**:
+```json
+[
+  {
+    "id": 1,
+    "title": "Tax Slabs for FY 2025-26",
+    "slug": "tax-slabs-fy-2025-26",
+    "content": "Blog content here...",
+    "category": "Tax Planning",
+    "read_time": "5 min read",
+    "created_at": "2025-01-20T10:30:00Z",
+    "updated_at": "2025-01-20T10:30:00Z"
+  }
+]
+```
+- **Test Strategy**: Verify blog data structure and content accessibility
+
+#### 3.2 Blog Images API
+- **Endpoint**: `GET https://the-internet.herokuapp.com/blogs/Img/{filename}`
+- **Purpose**: Serve blog post images
+- **Authentication**: Not required
+- **Examples**:
+  - `https://the-internet.herokuapp.com/blogs/Img/1745250823962-high-angle-budget-wooden-blocks.jpg`
+  - `https://the-internet.herokuapp.com/blogs/Img/1745250761214-ChatGPTImageApr21202509_22_20PM.png`
+- **Test Strategy**: Verify image accessibility and proper content-type headers
+
+### 4. File Upload APIs
+
+#### 4.1 Form 16 Upload (Chat Interface)
+- **Endpoint**: Available through chat interface
+- **Purpose**: Upload Form 16 PDF for personalized tax analysis
+- **File Types**: PDF only
+- **Max Size**: Not specified in frontend
+- **Test Strategy**: Test file type validation, size limits, and processing
+
+#### 4.2 Form 16 Upload (Tax Calculator)
+- **Endpoint**: Available through check-regime page
+- **Purpose**: Upload Form 16 for automated tax calculation
+- **File Types**: PDF only
+- **Test Strategy**: Test upload flow and subsequent tax calculations
+
+### 5. Authentication APIs
+
+#### 5.1 Sign In
+- **Status**: Available but not fully implemented
+- **Endpoint**: Likely `POST https://the-internet.herokuapp.com/auth/signin`
+- **Purpose**: User authentication for personalized features
+- **Test Strategy**: Test sign-in button functionality and modal/redirect behavior
+
+## Playwright Test Implementation
+
+### Test Categories
+
+1. **Functional Tests**
+   - Chat API functionality
+   - Tax calculator accuracy
+   - Blog content loading
+   - File upload workflows
+
+2. **Integration Tests**
+   - End-to-end user workflows
+   - API chaining scenarios
+   - Cross-feature interactions
+
+3. **Performance Tests**
+   - API response times
+   - Chat response latency
+   - Page load speeds
+
+4. **Error Handling Tests**
+   - Invalid input validation
+   - Network failure scenarios
+   - Authentication errors
+
+5. **Security Tests**
+   - Input sanitization
+   - File upload security
+   - Authentication bypasses
+
+### Key Test Scenarios
+
+#### Chat API Tests
+```javascript
+// Test basic chat functionality
+test('should respond to tax queries', async ({ page }) => {
+  await page.goto('https://the-internet.herokuapp.com/chat');
+  await page.fill('textarea', 'What are tax slabs for 2025-26?');
+  await page.click('button[type="submit"]');
+  await expect(page.locator('text=Income Tax Slabs')).toBeVisible();
+});
+
+// Test direct API call
+test('should handle direct chat API', async ({ request }) => {
+  const response = await request.post('https://the-internet.herokuapp.com/chat/stream', {
+    data: { message: 'Tax question', conversation_id: 'test-123' }
+  });
+  expect([200, 400, 401]).toContain(response.status());
+})

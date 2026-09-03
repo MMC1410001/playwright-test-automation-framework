@@ -1,0 +1,9 @@
+{
+  "batch_id": "manual-test-001",
+  "source": "aethereus",
+  "submitted_at": "2026-05-20T12:00:00Z",
+  "records": [
+    { "dealer_code": "DEMO001", "touch_type": "visit",  "touch_date": "2026-05-19", "notes": "Manual test record 1" },
+    { "dealer_code": "DEMO002", "touch_type": "call",   "touch_date": "2026-05-19", "notes": "Manual test record 2" }
+  ]
+}

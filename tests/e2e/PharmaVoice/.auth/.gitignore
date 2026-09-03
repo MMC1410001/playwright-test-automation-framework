@@ -1,0 +1,3 @@
+# Add .auth directory to gitignore but keep the directory structure
+*.json
+chrome-profile/

@@ -1,0 +1,36 @@
+{
+  "name": "playwrightqaautomation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "node kill-port-9033.js && npx playwright test",
+    "retail_crm:auth": "node tests/e2e/RetailCrm/Chatbot/auth.setup.js",
+    "retail_crm:auth:force": "node tests/e2e/RetailCrm/Chatbot/auth.setup.js --force",
+    "retail_crm:homepage": "npx playwright test tests/e2e/RetailCrm/Chatbot/homepage.spec.js --workers=1",
+    "test:sfa": "npx playwright test tests/api/retail_crm_chatbot/sfa_know_about_product_test.js --workers=1 --grep-invert @sweep",
+    "test:sfa:sweep": "npx playwright test tests/api/retail_crm_chatbot/sfa_know_about_product_test.js --workers=1 --grep @sweep",
+    "test:chatbot": "npx playwright test tests/api/retail_crm_chatbot/retail_crm_chatbot_api_test.js --workers=1",
+    "test:chatbot:boundary": "npx playwright test tests/api/retail_crm_chatbot/retail_crm_chatbot_boundary_test.js --workers=1 --grep-invert @lockout",
+    "test:chatbot:lockout": "npx playwright test tests/api/retail_crm_chatbot/retail_crm_chatbot_boundary_test.js --workers=1 --grep @lockout",
+    "test:chatbot:vapt": "npx playwright test tests/api/retail_crm_chatbot/retail_crm_chatbot_VAPT_test.js --workers=1 --grep-invert @manual",
+    "test:chatbot:manual": "npx playwright test tests/api/retail_crm_chatbot/retail_crm_chatbot_VAPT_test.js --workers=1 --grep @manual --headed"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^22.14.1",
+    "auto-playwright": "^1.16.0",
+    "jsonwebtoken": "^9.0.3",
+    "playwright": "^1.56.1",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.9.0",
+    "docx": "^9.7.0",
+    "dotenv": "^16.4.5",
+    "zod": "^3.24.2"
+  }
+}

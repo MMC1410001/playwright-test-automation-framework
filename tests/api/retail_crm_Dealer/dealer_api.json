@@ -1,0 +1,762 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Dealer Sales APIs",
+    "version": "1.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Health",
+        "description": "Check if the API is running. Accessible without authentication.\n\nPublic endpoint intentionally left unauthenticated for health probes.",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/dealers/{dealer_id}/sales/overall-summary": {
+      "get": {
+        "tags": [
+          "graphs"
+        ],
+        "summary": "Overall Sales Summary",
+        "description": "Overall Sales Summary\n\n- MTD: weekly buckets with last bucket truncated to asOfDate (e.g., 15th-19th)\n- PREVIOUS MONTH: fixed weekly buckets (full month)\n- YTD: Q1-Q4 always (FY Apr-Mar), missing quarters filled with 0\n- QTD / PREVIOUS QUARTER: months in window",
+        "operationId": "overall_sales_summary_dealers__dealer_id__sales_overall_summary_get",
+        "parameters": [
+          {
+            "name": "dealer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dealer Id"
+            }
+          },
+          {
+            "name": "asOfDate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "YYYY-MM-DD; defaults to dataset max invoice_date",
+              "title": "Asofdate"
+            },
+            "description": "YYYY-MM-DD; defaults to dataset max invoice_date"
+          },
+          {
+            "name": "distributionChannel",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated channel ids (e.g., 11,12) or All",
+              "default": "All",
+              "title": "Distributionchannel"
+            },
+            "description": "Comma-separated channel ids (e.g., 11,12) or All"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dealers/{dealer_id}/sales/top-products": {
+      "get": {
+        "tags": [
+          "graphs"
+        ],
+        "summary": "Top Products",
+        "operationId": "top_products_dealers__dealer_id__sales_top_products_get",
+        "parameters": [
+          {
+            "name": "dealer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dealer Id"
+            }
+          },
+          {
+            "name": "asOfDate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "YYYY-MM-DD; defaults to dataset max invoice_date",
+              "title": "Asofdate"
+            },
+            "description": "YYYY-MM-DD; defaults to dataset max invoice_date"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 5,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "distributionChannel",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated channel ids (e.g., 11,12) or All",
+              "default": "All",
+              "title": "Distributionchannel"
+            },
+            "description": "Comma-separated channel ids (e.g., 11,12) or All"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dealers/{dealer_id}/sales/category-breakdown": {
+      "get": {
+        "tags": [
+          "graphs"
+        ],
+        "summary": "Category Breakdown",
+        "operationId": "category_breakdown_dealers__dealer_id__sales_category_breakdown_get",
+        "parameters": [
+          {
+            "name": "dealer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dealer Id"
+            }
+          },
+          {
+            "name": "asOfDate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Asofdate"
+            }
+          },
+          {
+            "name": "distributionChannel",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated channel ids (e.g., 11,12) or All",
+              "default": "All",
+              "title": "Distributionchannel"
+            },
+            "description": "Comma-separated channel ids (e.g., 11,12) or All"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dealers/{dealer_id}/sales/channel-split": {
+      "get": {
+        "tags": [
+          "graphs"
+        ],
+        "summary": "Channel Split",
+        "description": "Sales by Channel (filter+option pairs) + per-filter xAxis ranges.",
+        "operationId": "channel_split_dealers__dealer_id__sales_channel_split_get",
+        "parameters": [
+          {
+            "name": "dealer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dealer Id"
+            }
+          },
+          {
+            "name": "asOfDate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "YYYY-MM-DD; defaults to dataset max invoice_date",
+              "title": "Asofdate"
+            },
+            "description": "YYYY-MM-DD; defaults to dataset max invoice_date"
+          },
+          {
+            "name": "distributionChannel",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated channel ids (e.g., 11,12) or All",
+              "default": "All",
+              "title": "Distributionchannel"
+            },
+            "description": "Comma-separated channel ids (e.g., 11,12) or All"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dealers/{dealer_id}/sales/subbrand-split": {
+      "get": {
+        "tags": [
+          "graphs"
+        ],
+        "summary": "Subbrand Split",
+        "description": "Sales by Sub-Brand (filter+option pairs) + per-filter xAxis ranges.",
+        "operationId": "subbrand_split_dealers__dealer_id__sales_subbrand_split_get",
+        "parameters": [
+          {
+            "name": "dealer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dealer Id"
+            }
+          },
+          {
+            "name": "asOfDate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "YYYY-MM-DD; defaults to dataset max invoice_date",
+              "title": "Asofdate"
+            },
+            "description": "YYYY-MM-DD; defaults to dataset max invoice_date"
+          },
+          {
+            "name": "distributionChannel",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated channel ids (e.g., 11,12) or All",
+              "default": "All",
+              "title": "Distributionchannel"
+            },
+            "description": "Comma-separated channel ids (e.g., 11,12) or All"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dealers/{dealer_id}/sales/analytics": {
+      "get": {
+        "tags": [
+          "graphs"
+        ],
+        "summary": "Sales Analytics",
+        "description": "Sales Analytics\n\nOutput:\n{\n  data: {\n    Value: { MTD: {previous,current,growthPercentage}, ... },\n    Volume:{ ... }\n  }\n}\nIncludes all 5 filters.",
+        "operationId": "sales_analytics_dealers__dealer_id__sales_analytics_get",
+        "parameters": [
+          {
+            "name": "dealer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dealer Id"
+            }
+          },
+          {
+            "name": "asOfDate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "YYYY-MM-DD; defaults to dataset max invoice_date",
+              "title": "Asofdate"
+            },
+            "description": "YYYY-MM-DD; defaults to dataset max invoice_date"
+          },
+          {
+            "name": "distributionChannel",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated channel ids (e.g., 11,12) or All",
+              "default": "All",
+              "title": "Distributionchannel"
+            },
+            "description": "Comma-separated channel ids (e.g., 11,12) or All"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dealers/{dealer_id}/sales/products/search": {
+      "get": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "Product Sales Report Search",
+        "description": "Product Sales Report Search\n- category/subBrand/channel accept comma-separated multi-selects\n  Example:\n    category=Interior,Exterior\n    subBrand=One,Calista\n    channel=11,12\n- 'All' means no filter for that dimension\n- Returns VALID FILTER VALUES from DB (no misses)",
+        "operationId": "product_sales_report_search_dealers__dealer_id__sales_products_search_get",
+        "parameters": [
+          {
+            "name": "dealer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dealer Id"
+            }
+          },
+          {
+            "name": "periodType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "MTD | YTD | QTD | PREVIOUS MONTH | PREVIOUS QUARTER | CUSTOM",
+              "default": "MTD",
+              "title": "Periodtype"
+            },
+            "description": "MTD | YTD | QTD | PREVIOUS MONTH | PREVIOUS QUARTER | CUSTOM"
+          },
+          {
+            "name": "asOfDate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "YYYY-MM-DD; used for non-CUSTOM windows",
+              "title": "Asofdate"
+            },
+            "description": "YYYY-MM-DD; used for non-CUSTOM windows"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "YYYY-MM-DD (required for CUSTOM)",
+              "title": "Startdate"
+            },
+            "description": "YYYY-MM-DD (required for CUSTOM)"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "YYYY-MM-DD (required for CUSTOM)",
+              "title": "Enddate"
+            },
+            "description": "YYYY-MM-DD (required for CUSTOM)"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated category names or All. Values = Collaterals, Colorants, Company PS, Enamels, Exterior, Inst. Ext. Waterproofing Spl, Institutional Exterior Paints Regular, Institutional Exterior Waterproofing Reg, Institutional Interior Paints Regular, Institutional Metal Regular, Interior, Painting Tools, Unknown, Waterproofing, Wood Paints",
+              "default": "All",
+              "title": "Category"
+            },
+            "description": "Comma-separated category names or All. Values = Collaterals, Colorants, Company PS, Enamels, Exterior, Inst. Ext. Waterproofing Spl, Institutional Exterior Paints Regular, Institutional Exterior Waterproofing Reg, Institutional Interior Paints Regular, Institutional Metal Regular, Interior, Painting Tools, Unknown, Waterproofing, Wood Paints"
+          },
+          {
+            "name": "subBrand",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated sub-brand names or All. Values = Alldry, Allwood, Allwood Pro, Artist, Calista, Collaterals,One, Others, Prime, Sample Kit, Style",
+              "default": "All",
+              "title": "Subbrand"
+            },
+            "description": "Comma-separated sub-brand names or All. Values = Alldry, Allwood, Allwood Pro, Artist, Calista, Collaterals,One, Others, Prime, Sample Kit, Style"
+          },
+          {
+            "name": "distributionChannel",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated channel ids (as strings) or All. Values = 10, 11, 12, 21",
+              "default": "All",
+              "title": "Distributionchannel"
+            },
+            "description": "Comma-separated channel ids (as strings) or All. Values = 10, 11, 12, 21"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "value",
+                "volume",
+                "growth"
+              ],
+              "type": "string",
+              "description": "value | volume | growth",
+              "default": "value",
+              "title": "Sortby"
+            },
+            "description": "value | volume | growth"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string",
+              "description": "asc | desc",
+              "default": "desc",
+              "title": "Sortorder"
+            },
+            "description": "asc | desc"
+          },
+          {
+            "name": "downloadReport",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "If true, returns ALL rows (ignores pagination)",
+              "default": false,
+              "title": "Downloadreport"
+            },
+            "description": "If true, returns ALL rows (ignores pagination)"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "0-based page index: 0=first page",
+              "default": 0,
+              "title": "Page"
+            },
+            "description": "0-based page index: 0=first page"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 25,
+              "title": "Pagesize"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ]
+}
